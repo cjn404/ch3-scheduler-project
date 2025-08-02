@@ -18,12 +18,12 @@ public class SchedulerService {
     private final SchedulerRepository schedulerRepository;
 
     @Transactional
-    public SchedulerResponse save(SchedulerRequest schedulerRequest) {
+    public SchedulerResponse save(SchedulerRequest Request) {
         Scheduler scheduler = new Scheduler(
-                schedulerRequest.getPassword(),
-                schedulerRequest.getName(),
-                schedulerRequest.getTitle(),
-                schedulerRequest.getContent()
+                Request.getPassword(),
+                Request.getName(),
+                Request.getTitle(),
+                Request.getContent()
         );
         Scheduler savedScheduler = schedulerRepository.save(scheduler);
 
@@ -69,6 +69,22 @@ public class SchedulerService {
         Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 " + id + "는 없습니다.")
         );
+        return new SchedulerResponse(
+                scheduler.getId(),
+                scheduler.getName(),
+                scheduler.getTitle(),
+                scheduler.getContent(),
+                scheduler.getCreatedAt(),
+                scheduler.getModifiedAt()
+        );
+    }
+
+    @Transactional
+    public SchedulerResponse updateScheduler(Long id, SchedulerRequest request) {
+        Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 " + id + "는 없습니다.")
+        );
+        scheduler.updateScheduler(request.getName(), request.getTitle());
         return new SchedulerResponse(
                 scheduler.getId(),
                 scheduler.getName(),
