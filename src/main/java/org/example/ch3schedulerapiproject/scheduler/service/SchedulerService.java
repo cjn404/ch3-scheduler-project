@@ -37,9 +37,17 @@ public class SchedulerService {
         );
     }
 
+    // '작성자명'이 있으면 '작성자명' 기준, 없으면 전체 목록
     @Transactional(readOnly = true)
-    public List<SchedulerResponse> findSchedulers() {
-        List<Scheduler> schedulers = schedulerRepository.findAll();
+    public List<SchedulerResponse> findSchedulers(String name) {
+        List<Scheduler> schedulers;
+
+        if (name != null && !name.isEmpty()) {
+            schedulers = schedulerRepository.findByNameOrderByModifiedAtDesc(name);
+        } else {
+            schedulers = schedulerRepository.findAllByOrderByModifiedAtDesc();
+        }
+
         List<SchedulerResponse> dtos = new ArrayList<>();
 
         for (Scheduler scheduler : schedulers) {
@@ -59,7 +67,7 @@ public class SchedulerService {
     @Transactional(readOnly = true)
     public SchedulerResponse findScheduler(Long id) {
         Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException("해당 " + id + "는 없습니다.")
+                () -> new IllegalArgumentException("해당 " + id + "는 없습니다.")
         );
         return new SchedulerResponse(
                 scheduler.getId(),

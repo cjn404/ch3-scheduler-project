@@ -22,9 +22,12 @@ public class SchedulerController {
         return ResponseEntity.ok(schedulerService.save(request));
     }
 
+    // '작성자명'이 있으면 '작성자명' 기준, 없으면 전체 목록
     @GetMapping("/schedulers")
-    public ResponseEntity<List<SchedulerResponse>> getSchedulers() {
-        return ResponseEntity.ok(schedulerService.findSchedulers());
+    public ResponseEntity<List<SchedulerResponse>> getSchedulers(
+            @RequestParam(required = false) String name
+    ) {
+        return ResponseEntity.ok(schedulerService.findSchedulers(name));
     }
 
     @GetMapping("/schedulers/{schedulerId}")
