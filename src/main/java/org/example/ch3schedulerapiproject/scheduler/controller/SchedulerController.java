@@ -37,7 +37,7 @@ public class SchedulerController {
         return ResponseEntity.ok(schedulerService.findScheduler(schedulerId));
     }
 
-    @PutMapping("/schedulers/{schedulerId}")
+    @PatchMapping("/schedulers/{schedulerId}")
     public ResponseEntity<SchedulerResponse> updateScheduler(
             @PathVariable Long schedulerId,
             @RequestBody SchedulerRequest request
