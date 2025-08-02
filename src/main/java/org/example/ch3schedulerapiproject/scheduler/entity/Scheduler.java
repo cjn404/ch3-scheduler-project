@@ -27,7 +27,7 @@ public class Scheduler extends BaseEntity {
         this.content = content;
     }
 
-    public void updateScheduler(String title, String content) {
+    public void updateScheduler(String name, String title) {
         this.name = name;
         this.title = title;
     }
