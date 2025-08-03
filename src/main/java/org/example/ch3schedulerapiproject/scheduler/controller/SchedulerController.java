@@ -3,6 +3,7 @@ package org.example.ch3schedulerapiproject.scheduler.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerResponse;
+import org.example.ch3schedulerapiproject.scheduler.dto.UpdateSchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.service.SchedulerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class SchedulerController {
     @PatchMapping("/schedulers/{schedulerId}")
     public ResponseEntity<SchedulerResponse> updateScheduler(
             @PathVariable Long schedulerId,
-            @RequestBody SchedulerRequest request
+            @RequestBody UpdateSchedulerRequest request
     ) {
         return ResponseEntity.ok(schedulerService.updateScheduler(schedulerId, request));
     }

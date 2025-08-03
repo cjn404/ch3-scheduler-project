@@ -3,6 +3,7 @@ package org.example.ch3schedulerapiproject.scheduler.service;
 import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerResponse;
+import org.example.ch3schedulerapiproject.scheduler.dto.UpdateSchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.entity.Scheduler;
 import org.example.ch3schedulerapiproject.scheduler.repository.SchedulerRepository;
 import org.springframework.stereotype.Service;
@@ -67,7 +68,7 @@ public class SchedulerService {
     @Transactional(readOnly = true)
     public SchedulerResponse findScheduler(Long id) {
         Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 " + id + "는 없습니다.")
+                () -> new IllegalArgumentException("해당 id" + id + "는 없습니다.")
         );
         return new SchedulerResponse(
                 scheduler.getId(),
@@ -80,10 +81,16 @@ public class SchedulerService {
     }
 
     @Transactional
-    public SchedulerResponse updateScheduler(Long id, SchedulerRequest request) {
+    public SchedulerResponse updateScheduler(Long id, UpdateSchedulerRequest request) {
         Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 " + id + "는 없습니다.")
+                () -> new IllegalArgumentException("해당 id" + id + "는 없습니다.")
         );
+
+        // 비밀번호 검증
+        if (!scheduler.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
         scheduler.updateScheduler(request.getName(), request.getTitle());
         return new SchedulerResponse(
                 scheduler.getId(),
