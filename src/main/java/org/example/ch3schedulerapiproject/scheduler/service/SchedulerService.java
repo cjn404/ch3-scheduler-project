@@ -72,7 +72,7 @@ public class SchedulerService {
     public SchedulerResponse findScheduler(Long id) {
         Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
 //                () -> new IllegalArgumentException("해당 id" + id + "는 없습니다.") // 에러 코드 500
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 id" + id + "는 없습니다.") // 에러 코드 404
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 id " + id + "는 없습니다.") // 에러 코드 404
         );
         return new SchedulerResponse(
                 scheduler.getId(),
@@ -87,7 +87,7 @@ public class SchedulerService {
     @Transactional
     public SchedulerResponse updateScheduler(Long id, UpdateSchedulerRequest request) {
         Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 id" + id + "는 없습니다.")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 id " + id + "는 없습니다.")
         );
 
         // 비밀번호 검증
