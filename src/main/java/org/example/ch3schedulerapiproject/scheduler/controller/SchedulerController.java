@@ -1,6 +1,7 @@
 package org.example.ch3schedulerapiproject.scheduler.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.ch3schedulerapiproject.scheduler.dto.DeleteSchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerResponse;
 import org.example.ch3schedulerapiproject.scheduler.dto.UpdateSchedulerRequest;
@@ -48,9 +49,10 @@ public class SchedulerController {
 
     @DeleteMapping("/schedulers/{schedulerId}")
     public ResponseEntity<Void> deleteScheduler(
-            @PathVariable Long schedulerId
+            @PathVariable Long schedulerId,
+            @RequestBody DeleteSchedulerRequest request
     ) {
-        schedulerService.deleteScheduler(schedulerId);
-        return ResponseEntity.ok().build();
+        schedulerService.deleteScheduler(schedulerId, request);
+        return ResponseEntity.noContent().build();
     }
 }

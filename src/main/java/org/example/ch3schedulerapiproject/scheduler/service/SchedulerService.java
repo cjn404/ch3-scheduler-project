@@ -1,6 +1,7 @@
 package org.example.ch3schedulerapiproject.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.ch3schedulerapiproject.scheduler.dto.DeleteSchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerResponse;
 import org.example.ch3schedulerapiproject.scheduler.dto.UpdateSchedulerRequest;
@@ -106,11 +107,19 @@ public class SchedulerService {
     }
 
     @Transactional
-    public void deleteScheduler(Long schedulerId) {
-        boolean exists = schedulerRepository.existsById(schedulerId);
-        if (!exists) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.");
+    public void deleteScheduler(Long schedulerId, DeleteSchedulerRequest request) {
+        Scheduler scheduler = schedulerRepository.findById(schedulerId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.")
+        );
+
+        // 비밀번호 검증
+        if (!scheduler.getPassword().equals(request.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다.");
         }
+//        boolean exists = schedulerRepository.existsById(schedulerId);
+//        if (!exists) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.");
+//        }
         schedulerRepository.deleteById(schedulerId);
     }
 }
