@@ -8,10 +8,13 @@ import org.example.ch3schedulerapiproject.scheduler.dto.UpdateSchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.entity.Scheduler;
 import org.example.ch3schedulerapiproject.scheduler.repository.SchedulerRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.beans.Encoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +23,14 @@ import java.util.List;
 public class SchedulerService {
 
     private final SchedulerRepository schedulerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public SchedulerResponse save(SchedulerRequest request) {
+        // 평문 비밀번호 -> 해시 변환
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
         Scheduler scheduler = new Scheduler(
-                request.getPassword(),
+                encodedPassword,
                 request.getName(),
                 request.getTitle(),
                 request.getContent()
@@ -91,7 +97,9 @@ public class SchedulerService {
         );
 
         // 비밀번호 검증
-        if (!scheduler.getPassword().equals(request.getPassword())) {
+//        if (!scheduler.getPassword().equals(request.getPassword())) {
+        // matches(입력한 평문, 저장된 해시)
+        if (!passwordEncoder.matches(request.getPassword(), scheduler.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."); // 에러 코드 401
         }
 
@@ -113,7 +121,7 @@ public class SchedulerService {
         );
 
         // 비밀번호 검증
-        if (!scheduler.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), scheduler.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 //        boolean exists = schedulerRepository.existsById(schedulerId);
