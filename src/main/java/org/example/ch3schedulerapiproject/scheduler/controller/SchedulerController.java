@@ -45,4 +45,12 @@ public class SchedulerController {
     ) {
         return ResponseEntity.ok(schedulerService.updateScheduler(schedulerId, request));
     }
+
+    @DeleteMapping("/schedulers/{schedulerId}")
+    public ResponseEntity<Void> deleteScheduler(
+            @PathVariable Long schedulerId
+    ) {
+        schedulerService.deleteScheduler(schedulerId);
+        return ResponseEntity.ok().build();
+    }
 }

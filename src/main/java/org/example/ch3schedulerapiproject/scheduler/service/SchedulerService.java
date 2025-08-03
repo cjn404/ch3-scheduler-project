@@ -104,4 +104,13 @@ public class SchedulerService {
                 scheduler.getModifiedAt()
         );
     }
+
+    @Transactional
+    public void deleteScheduler(Long schedulerId) {
+        boolean exists = schedulerRepository.existsById(schedulerId);
+        if (!exists) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.");
+        }
+        schedulerRepository.deleteById(schedulerId);
+    }
 }
