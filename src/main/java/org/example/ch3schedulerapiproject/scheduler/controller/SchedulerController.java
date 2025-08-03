@@ -1,5 +1,6 @@
 package org.example.ch3schedulerapiproject.scheduler.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerapiproject.scheduler.dto.DeleteSchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerRequest;
@@ -19,7 +20,7 @@ public class SchedulerController {
 
     @PostMapping("/schedulers")
     public ResponseEntity<SchedulerResponse> createScheduler(
-            @RequestBody SchedulerRequest request
+            @Valid @RequestBody SchedulerRequest request // @NotBlank 세트
     ) {
         return ResponseEntity.ok(schedulerService.save(request));
     }
