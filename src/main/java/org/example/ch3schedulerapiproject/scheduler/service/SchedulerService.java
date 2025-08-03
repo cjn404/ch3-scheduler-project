@@ -92,7 +92,7 @@ public class SchedulerService {
 
         // 비밀번호 검증
         if (!scheduler.getPassword().equals(request.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."); // 에러 코드 401
         }
 
         scheduler.updateScheduler(request.getName(), request.getTitle());
@@ -114,7 +114,7 @@ public class SchedulerService {
 
         // 비밀번호 검증
         if (!scheduler.getPassword().equals(request.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 //        boolean exists = schedulerRepository.existsById(schedulerId);
 //        if (!exists) {
