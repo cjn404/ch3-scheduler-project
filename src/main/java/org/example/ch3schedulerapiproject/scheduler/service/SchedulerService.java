@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.lang.module.ResolutionException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +21,12 @@ public class SchedulerService {
     private final SchedulerRepository schedulerRepository;
 
     @Transactional
-    public SchedulerResponse save(SchedulerRequest Request) {
+    public SchedulerResponse save(SchedulerRequest request) {
         Scheduler scheduler = new Scheduler(
-                Request.getPassword(),
-                Request.getName(),
-                Request.getTitle(),
-                Request.getContent()
+                request.getPassword(),
+                request.getName(),
+                request.getTitle(),
+                request.getContent()
         );
         Scheduler savedScheduler = schedulerRepository.save(scheduler);
 
@@ -43,11 +42,11 @@ public class SchedulerService {
 
     // '작성자명'이 있으면 '작성자명' 기준, 없으면 전체 목록
     @Transactional(readOnly = true)
-    public List<SchedulerResponse> findSchedulers(String name) {
+    public List<SchedulerResponse> findSchedulers(String schedulerName) {
         List<Scheduler> schedulers;
 
-        if (name != null && !name.isEmpty()) {
-            schedulers = schedulerRepository.findByNameOrderByModifiedAtDesc(name);
+        if (schedulerName != null && !schedulerName.isEmpty()) {
+            schedulers = schedulerRepository.findByNameOrderByModifiedAtDesc(schedulerName);
         } else {
             schedulers = schedulerRepository.findAllByOrderByModifiedAtDesc();
         }
@@ -69,10 +68,10 @@ public class SchedulerService {
     }
 
     @Transactional(readOnly = true)
-    public SchedulerResponse findScheduler(Long id) {
-        Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("해당 id" + id + "는 없습니다.") // 에러 코드 500
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 id " + id + "는 없습니다.") // 에러 코드 404
+    public SchedulerResponse findScheduler(Long schedulerId) {
+        Scheduler scheduler = schedulerRepository.findById(schedulerId).orElseThrow(
+//                () -> new IllegalArgumentException("해당 schedulerId" + schedulerId + "는 없습니다.") // 에러 코드 500
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 schedulerId " + schedulerId + "는 없습니다.") // 에러 코드 404
         );
         return new SchedulerResponse(
                 scheduler.getId(),
@@ -85,9 +84,9 @@ public class SchedulerService {
     }
 
     @Transactional
-    public SchedulerResponse updateScheduler(Long id, UpdateSchedulerRequest request) {
-        Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 id " + id + "는 없습니다.")
+    public SchedulerResponse updateScheduler(Long schedulerId, UpdateSchedulerRequest request) {
+        Scheduler scheduler = schedulerRepository.findById(schedulerId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 schedulerId " + schedulerId + "는 없습니다.")
         );
 
         // 비밀번호 검증
