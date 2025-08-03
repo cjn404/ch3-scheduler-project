@@ -6,9 +6,12 @@ import org.example.ch3schedulerapiproject.scheduler.dto.SchedulerResponse;
 import org.example.ch3schedulerapiproject.scheduler.dto.UpdateSchedulerRequest;
 import org.example.ch3schedulerapiproject.scheduler.entity.Scheduler;
 import org.example.ch3schedulerapiproject.scheduler.repository.SchedulerRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.lang.module.ResolutionException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +71,8 @@ public class SchedulerService {
     @Transactional(readOnly = true)
     public SchedulerResponse findScheduler(Long id) {
         Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 id" + id + "는 없습니다.")
+//                () -> new IllegalArgumentException("해당 id" + id + "는 없습니다.") // 에러 코드 500
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 id" + id + "는 없습니다.") // 에러 코드 404
         );
         return new SchedulerResponse(
                 scheduler.getId(),
@@ -83,12 +87,12 @@ public class SchedulerService {
     @Transactional
     public SchedulerResponse updateScheduler(Long id, UpdateSchedulerRequest request) {
         Scheduler scheduler = schedulerRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 id" + id + "는 없습니다.")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 id" + id + "는 없습니다.")
         );
 
         // 비밀번호 검증
         if (!scheduler.getPassword().equals(request.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다.");
         }
 
         scheduler.updateScheduler(request.getName(), request.getTitle());
