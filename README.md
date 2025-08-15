@@ -1,4 +1,4 @@
-# Ch3 일정 관리 API 프로젝트
+# Ch3 일정 관리 앱 프로젝트
 
 ## 목표
 3 Layer Architecture 에 따라 CRUD 필수 기능은 JPA를 통해 DB(MySQL)과 연동되도록 구현
@@ -106,7 +106,4 @@ src
 <br>
 
 ## ERD
-![](https://velog.velcdn.com/images/moi404/post/c0327376-2434-4992-93db-eeaceed1ecb3/image.png)
-
-***
-
+<img width="375" height="420" alt="Image" src="https://github.com/user-attachments/assets/e971cd76-bd52-4ae6-9eaf-be0d182cc0c1" />
